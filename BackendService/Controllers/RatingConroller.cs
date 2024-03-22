@@ -27,10 +27,10 @@ public class RatingController: BaseController
         return Ok(users);
     }
     [Authorize]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetRank(int id)
+    [HttpGet("rank")]
+    public async Task<IActionResult> GetRank()
     {
-        var index = await ratingService.GetRank(id);
+        var index = await ratingService.GetRank(UserId);
         if (index != -1)
         {
             return Ok(index);

@@ -18,10 +18,10 @@ public class UserController: BaseController
     {
         this.userService = userService;
     }
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetInfo(int id)
+    [HttpGet("/my")]
+    public async Task<IActionResult> GetInfo()
     {
-        var userExist = await userService.GetById(id);
+        var userExist = await userService.GetById(UserId);
         if (userExist == null)
         {
             return BadRequest();
