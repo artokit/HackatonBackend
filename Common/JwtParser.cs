@@ -6,13 +6,12 @@ public static class JwtParser
 {
     public static int GetUserId(this string token)
     {
-        return int.Parse(ParserToken(token, "id"));
+        return int.Parse(token.ParserToken("Id"));
     }
 
     private static string ParserToken(this string token, string role)
     {
         var removeBearer = token.Split(' ')[1];
-        Console.WriteLine(removeBearer);
         var handler = new JwtSecurityTokenHandler();
         var tokenData = handler.ReadJwtToken(removeBearer);
         var s = tokenData.Payload;
