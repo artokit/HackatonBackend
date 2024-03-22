@@ -12,6 +12,7 @@ public static class JwtParser
     private static string ParserToken(this string token, string role)
     {
         var removeBearer = token.Split(' ')[1];
+        Console.WriteLine(removeBearer);
         var handler = new JwtSecurityTokenHandler();
         var tokenData = handler.ReadJwtToken(removeBearer);
         var s = tokenData.Payload;
