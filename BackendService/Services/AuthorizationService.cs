@@ -28,19 +28,20 @@ public class AuthorizationService
         return new AuthResponseDto { AccessToken = GenerateAccessToken(user) };
     }
 
-    public async Task<AuthResponseDto?> Register(User user)
+    public async Task<AuthResponseDto?> Register(RegisterDto user)
     {
         if (await userService.CheckUserExist(user) != ValidationUserStatus.Success)
         {
             return null;
         }
+        
         var userAdded = await userService.AddUser(user);
         return userAdded is null ? null : new AuthResponseDto { AccessToken = GenerateAccessToken(userAdded) };
     }
     
     private static string GenerateAccessToken(User user)
     {
-        var claims = GetClaims(user.Id, user.IsAdmin);
+        var claims = GetClaims(user.Id, user.Role);
         return GenerateJwtToken(claims, AuthOptions.LifeTimeAccessToken);
     }
 
@@ -55,9 +56,13 @@ public class AuthorizationService
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    private static List<Claim> GetClaims(int userId, bool isAdmin)
+    private static List<Claim> GetClaims(int userId, string role)
     {
-        var claims = new List<Claim> { new(ClaimType.Id.ToString(), userId.ToString()), new(ClaimType.IsAdmin.ToString(), isAdmin.ToString()) };
+        var claims = new List<Claim>
+        {
+            new(ClaimType.Id.ToString(), userId.ToString()),
+            new (ClaimsIdentity.DefaultRoleClaimType, role)
+        };
         return claims;
     }
 }
