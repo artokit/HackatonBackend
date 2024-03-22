@@ -26,7 +26,7 @@ builder.Services.AddSingleton<IConnection, Connection>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthorizationService>();
-
+builder.Services.AddScoped<RatingService>();
 
 //создаются раз когда вызываются Transident
 
