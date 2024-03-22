@@ -19,9 +19,9 @@ public class UserController: BaseController
         this.userService = userService;
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetInfo()
+    public async Task<IActionResult> GetInfo(int id)
     {
-        var userExist = await userService.GetById(UserId);
+        var userExist = await userService.GetById(id);
         if (userExist == null)
         {
             return BadRequest();

@@ -28,14 +28,16 @@ public class RatingService
     {
         var users = await userRepository.GetRating();
         var index = -1;
-        if (!users.IsNullOrEmpty())
+        if (users.IsNullOrEmpty())
         {
-            for (var i = 0; i < users.Count; i++)
+            return index;
+        }
+
+        for (var i = 0; i < users.Count(); i++)
+        {
+            if (users[i].Id == id)
             {
-                if (users[i].Id == id)
-                {
-                    index = i + 1;
-                }
+                index = i + 1;
             }
         }
         return index;

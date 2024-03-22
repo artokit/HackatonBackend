@@ -25,14 +25,14 @@ public class UserRepository
     public async Task<List<RankingUserDTO?>> GetTop10()
     {
         var queryObject = new QueryObject(
-            $"SELECT \"Username\", \"RatingScore\" FROM USERS ORDER BY \"RatingScore\" DESC LIMIT 10");
+            $"SELECT \"Id\", \"Username\", \"RatingScore\" FROM USERS ORDER BY \"RatingScore\" DESC");
         return await connection.ListOrEmpty<RankingUserDTO?>(queryObject);
     }
 
     public async Task<List<RankingUserDTO?>> GetRating()
     {
         var queryObject = new QueryObject(
-            @"SELECT * FROM USERS ORDER BY ""RatingScore""");
+            @"SELECT  ""Id"", ""Username"", ""RatingScore"" FROM USERS ORDER BY ""RatingScore"" DESC");
         return await connection.ListOrEmpty<RankingUserDTO>(queryObject);
     }
     public async Task<User?> AddUser(User user)
