@@ -11,8 +11,10 @@ public class M0000_InitialMigration : Migration
         Create.Table("users")
             .WithColumn("Id").AsInt64().Identity().NotNullable().PrimaryKey()
             .WithColumn("Username").AsString().Unique().NotNullable()
+            .WithColumn("Photo").
             .WithColumn("Password").AsString().NotNullable()
-            .WithColumn("Email").AsString().Unique().NotNullable();
+            .WithColumn("Email").AsString().Unique().NotNullable()
+            .WithColumn("RatingScore").AsInt64().NotNullable();
     }
 
     public override void Down()
