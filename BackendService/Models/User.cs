@@ -9,5 +9,4 @@ public class User
     public string Password { get; set; }
     public string Photo { get; set; }
     public int RatingScore { get; set; }
-    
 }

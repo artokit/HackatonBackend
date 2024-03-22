@@ -11,7 +11,7 @@ public class M0000_InitialMigration : Migration
         Create.Table("users")
             .WithColumn("Id").AsInt64().Identity().NotNullable().PrimaryKey()
             .WithColumn("Username").AsString().Unique().NotNullable()
-            .WithColumn("Photo").AsString()
+            .WithColumn("Photo").AsString().Nullable()
             .WithColumn("Password").AsString().NotNullable()
             .WithColumn("Email").AsString().Unique().NotNullable()
             .WithColumn("RatingScore").AsInt64().NotNullable().WithDefaultValue(0)

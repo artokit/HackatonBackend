@@ -24,6 +24,7 @@ builder.Services.AddSingleton<IConnection, Connection>();
 
 //создаются каждый http запрос Scoped
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<RatingService>();
@@ -66,5 +67,4 @@ app.UseSwaggerUI();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.Run();
