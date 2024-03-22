@@ -51,6 +51,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuerSigningKey = true
     };
 });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 var serviceProvider = app.Services.CreateScope().ServiceProvider;
@@ -64,5 +65,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
