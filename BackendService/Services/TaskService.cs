@@ -27,8 +27,25 @@ public class TaskService
     {
         return await taskRepository.AddTask(task);
     }
-    
-    //TODO: Артем запили пж UpdateTask
+
+    public async Task<TaskCase?> UpdateTask(UpdateTaskDTO task)
+    {
+        var currentTask = await GetById(task.Id);
+        if (currentTask is null)
+        {
+            return null;
+        }
+
+        var t = new TaskCase
+        {
+            Id=task.Id,
+            LevelId = task.LevelId ?? currentTask.LevelId,
+            CategoryId = task.CategoryId ?? currentTask.CategoryId,
+            RightAnswer = task.RightAnswer ?? currentTask.RightAnswer,
+            Content = task.Content ?? currentTask.Content
+        };
+        return await taskRepository.UpdateTask(t);
+    }
 
     public async Task<TaskCase?> DeleteTask(int id)
     {

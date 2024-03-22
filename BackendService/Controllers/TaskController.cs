@@ -30,7 +30,7 @@ public class TaskController: BaseController
         return Ok(tasks);
     }
 
-    [HttpGet("/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var task = await taskService.GetById(id);
@@ -41,8 +41,18 @@ public class TaskController: BaseController
 
         return Ok(task);
     }
-    
-    //TODO: Артем сделай пж Httpput
+
+    [HttpPut("update")]
+    // [Authorize(Roles = "admin")]
+    public async Task<IActionResult> UpdateTask(UpdateTaskDTO task)
+    {
+        var updatedTask = await taskService.UpdateTask(task);
+        if (updatedTask is null)
+        {
+            return NotFound();
+        }
+        return Ok(updatedTask);
+    }
     
     [HttpPost("")]
     public async Task<IActionResult> AddTask(TaskDTO task)
