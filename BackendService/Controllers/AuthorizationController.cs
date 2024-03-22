@@ -38,7 +38,7 @@ public class AuthorizationController : BaseController
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] User user)
     {
-        if (user.Login.IsNullOrEmpty() || user.Password.IsNullOrEmpty())
+        if (user.Username.IsNullOrEmpty() || user.Password.IsNullOrEmpty())
         {
             return BadRequest("Логин и пароль не могут быть пустыми");
         }
