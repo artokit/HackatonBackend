@@ -14,7 +14,8 @@ public class M0000_InitialMigration : Migration
             .WithColumn("Photo").AsString()
             .WithColumn("Password").AsString().NotNullable()
             .WithColumn("Email").AsString().Unique().NotNullable()
-            .WithColumn("RatingScore").AsInt64().NotNullable();
+            .WithColumn("RatingScore").AsInt64().NotNullable()
+            .WithColumn("IsAdmin").AsBoolean().NotNullable();
     }
 
     public override void Down()
