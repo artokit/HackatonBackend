@@ -27,7 +27,7 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthorizationService>();
-
+builder.Services.AddScoped<RatingService>();
 
 //создаются раз когда вызываются Transident
 

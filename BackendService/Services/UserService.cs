@@ -12,7 +12,6 @@ public class UserService
     {
         this.userRepository = userRepository;
     }
-
     
     public async Task<User?> AddUser(User user)
     {
@@ -20,6 +19,10 @@ public class UserService
         return await userRepository.AddUser(user);
     }
 
+    public async Task<User?> GetById(int id)
+    {
+        return await userRepository.GetById(id);
+    }
     public async Task<User?> GetByUsername(string username)
     {
         return await userRepository.GetByUsername(username);

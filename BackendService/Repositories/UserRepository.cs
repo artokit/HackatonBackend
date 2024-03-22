@@ -1,5 +1,6 @@
 using Database;
 using Database.Interfaces;
+using EducationService.Dto;
 using EducationService.Models;
 
 namespace EducationService.Repositories;
@@ -13,18 +14,39 @@ public class UserRepository
         this.connection = connection;
     }
 
+    // public async Task<Picture?> AddPicture(Picture picture)
+    // {
+    //     var queryObject = new QueryObject(
+    //         "INSERT INTO USERS(\"Image\") VALUES(@path) returning id",
+    //         new { path = picture.Path });
+    //     return await connection.CommandWithResponse<Picture>(queryObject);
+    // }
+
+    public async Task<List<RankingUserDTO?>> GetTop10()
+    {
+        var queryObject = new QueryObject(
+            $"SELECT \"Username\", \"RatingScore\" FROM USERS ORDER BY \"RatingScore\" DESC LIMIT 10");
+        return await connection.ListOrEmpty<RankingUserDTO?>(queryObject);
+    }
+
+    public async Task<List<RankingUserDTO?>> GetRating()
+    {
+        var queryObject = new QueryObject(
+            @"SELECT * FROM USERS ORDER BY ""RatingScore""");
+        return await connection.ListOrEmpty<RankingUserDTO>(queryObject);
+    }
     public async Task<User?> AddUser(User user)
     {
         var queryObject = new QueryObject(
-            $"INSERT INTO USERS(\"Username\", \"Password\", \"Email\") VALUES(@username, @password, @email) RETURNING \"Id\", \"Username\", \"Password\", \"Email\"",
-            new { username = user.Username, password = user.Password, email = user.Email });
+            $"INSERT INTO USERS(\"Username\", \"Password\", \"Email\", \"Photo\", \"RatingScore\", \"IsAdmin\") VALUES(@username, @password, @email, @photo, @rating, @admin) RETURNING \"Id\", \"Username\", \"Password\", \"Email\"",
+            new { username = user.Username, password = user.Password, email = user.Email, photo = user.Photo, rating = user.RatingScore, admin = false });
         return await connection.CommandWithResponse<User>(queryObject);
     }
 
     public async Task<User?> GetByUsername(string username)
     {
         var queryObject = new QueryObject(
-            "SELECT \"Id\", \"Username\", \"Password\", \"Email\" FROM USERS WHERE \"Username\" = @username",
+            "SELECT \"Id\", \"Username\", \"Password\", \"Email\", \"RatingScore\" FROM USERS WHERE \"Username\" = @username",
             new { username });
         return await connection.FirstOrDefault<User>(queryObject);
     }
@@ -32,7 +54,7 @@ public class UserRepository
     public async Task<User?> GetById(int id)
     {
         var queryObject = new QueryObject(
-            "SELECT \"Id\", \"Username\", \"Password\", \"Email\" FROM USERS WHERE \"Id\" = @id",
+            "SELECT \"Id\", \"Username\", \"Password\", \"Email\", \"RatingScore\" FROM USERS WHERE \"Id\" = @id",
             new { id });
         return await connection.FirstOrDefault<User>(queryObject);
     }
