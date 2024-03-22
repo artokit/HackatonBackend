@@ -43,7 +43,13 @@ public class TaskRepository
         return await connection.CommandWithResponse<TaskCase>(queryObject);
     }
 
-    //TODO:СДЕЛАЕШЬ КРЧ UPDATETASK ПЖ
+    public async Task<TaskCase> UpdateTask(TaskCase task)
+    {
+        var queryObject = new QueryObject(
+            "UPDATE \"Tasks\" SET \"LevelId\"=@LevelId, \"CategoryId\"=@CategoryId, \"RightAnswer\"=@RightAnswer, \"Content\"=@Content WHERE \"Id\" = @id RETURNING *", 
+            new {task.LevelId, task.CategoryId, task.RightAnswer, task.Content, task.Id});
+        return await connection.CommandWithResponse<TaskCase>(queryObject);
+    }
 
     public async Task<TaskCase?> DeleteTask(int id)
     {

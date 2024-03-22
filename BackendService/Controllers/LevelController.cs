@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationService.Controllers;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class LevelController : BaseController
 {
     private readonly LevelRepository LevelRepository;
