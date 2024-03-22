@@ -46,7 +46,7 @@ public class UserRepository
     public async Task<User?> GetByUsername(string username)
     {
         var queryObject = new QueryObject(
-            "SELECT \"Id\", \"Username\", \"Password\", \"Email\", \"RatingScore\" FROM USERS WHERE \"Username\" = @username",
+            "SELECT \"Id\", \"Username\", \"Password\", \"Email\", \"RatingScore\", \"IsAdmin\" FROM USERS WHERE \"Username\" = @username",
             new { username });
         return await connection.FirstOrDefault<User>(queryObject);
     }
