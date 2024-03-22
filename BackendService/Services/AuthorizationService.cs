@@ -40,7 +40,7 @@ public class AuthorizationService
     
     private static string GenerateAccessToken(User user)
     {
-        var claims = GetClaims(user.Id);
+        var claims = GetClaims(user.Id, user.IsAdmin);
         return GenerateJwtToken(claims, AuthOptions.LifeTimeAccessToken);
     }
 
@@ -55,9 +55,9 @@ public class AuthorizationService
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    private static List<Claim> GetClaims(int userId)
+    private static List<Claim> GetClaims(int userId, bool isAdmin)
     {
-        var claims = new List<Claim> { new(ClaimType.Id.ToString(), userId.ToString()) };
+        var claims = new List<Claim> { new(ClaimType.Id.ToString(), userId.ToString()), new(ClaimType.IsAdmin.ToString(), isAdmin.ToString()) };
         return claims;
     }
 }

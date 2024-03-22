@@ -6,5 +6,6 @@ namespace Common.Enums;
 [JsonConverter(typeof(StringEnumConverter))]
 public enum ClaimType
 {
-    Id
+    Id,
+    IsAdmin
 }
