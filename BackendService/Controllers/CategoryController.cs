@@ -1,5 +1,4 @@
 ﻿using EducationService.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationService.Controllers;
@@ -14,7 +13,7 @@ public class CategoryController : BaseController
         this.categoryRepository = categoryRepository;
     }
 
-    [Authorize]
+    // [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult> GetCategory(int id)
     {
@@ -23,10 +22,26 @@ public class CategoryController : BaseController
         return (category is null) ? NotFound() : Ok(category);
     }
 
-    [Authorize]
+    // [Authorize]
     [HttpGet("")]
     public async Task<ActionResult> GetAllCategories()
     {
         return Ok(await categoryRepository.GetListCategory());
+    }
+
+    // [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteCategory(int id)
+    {
+        var c = await categoryRepository.DeleteCategory(id);
+        return (c is null) ? NotFound() : Ok(c);
+    }
+    
+    // [Authorize]
+    [HttpPost("")]
+    public async Task<ActionResult> AddCategory(string name)
+    {
+        var c = await categoryRepository.AddCategory(name);
+        return Ok(c);
     }
 }
