@@ -24,6 +24,7 @@ builder.Services.AddSingleton<IConnection, Connection>();
 
 //создаются каждый http запрос Scoped
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<LevelRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthorizationService>();
