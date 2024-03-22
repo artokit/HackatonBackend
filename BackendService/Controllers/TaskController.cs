@@ -1,6 +1,7 @@
 ﻿using EducationService.Dto;
 using EducationService.Models;
 using EducationService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -48,12 +49,11 @@ public class TaskController: BaseController
     {
         return Ok(await taskService.AddTask(task));
     }
-
+    
     [HttpDelete("")]
     public async Task<IActionResult> DeleteTask(int id)
     {
         var task = await taskService.DeleteTask(id);
         return (task is null) ? NotFound() : Ok(task);
     }
-    
 }

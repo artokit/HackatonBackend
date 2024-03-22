@@ -1,4 +1,5 @@
 using Common.Enums;
+using EducationService.Dto;
 using EducationService.Models;
 using EducationService.Repositories;
 
@@ -13,7 +14,7 @@ public class UserService
         this.userRepository = userRepository;
     }
     
-    public async Task<User?> AddUser(User user)
+    public async Task<User?> AddUser(RegisterDto user)
     {
         user.Password = Common.Common.PasswordHash(user.Password);
         return await userRepository.AddUser(user);
@@ -33,7 +34,7 @@ public class UserService
         return await userRepository.GetByEmail(email);
     }
     
-    public async Task<ValidationUserStatus> CheckUserExist(User user)
+    public async Task<ValidationUserStatus> CheckUserExist(RegisterDto user)
     {
         if (await GetByUsername(user.Username) != null)
         {
