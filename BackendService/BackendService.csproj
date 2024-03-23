@@ -20,7 +20,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\Files\" />
+      <Folder Include="wwwroot\Achievement\" />
+      <Folder Include="wwwroot\Avatars\" />
     </ItemGroup>
 
 </Project>

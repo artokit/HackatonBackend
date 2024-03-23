@@ -30,13 +30,23 @@ public class UserController: BaseController
 
         return Ok(userExist);
     }
-    //[Authorize]
+    
+    [AllowAnonymous]
+    [HttpGet("image/{id]")]
+    public async Task<IActionResult> GetImage(int id)
+    {
+        var path = await userService.GetPath(id);
+        path = appEnviroment.WebRootPath + path;
+        var imageFileStream = System.IO.File.OpenRead(path);
+        return File(imageFileStream, "image/jpg");
+    }
+    
     [HttpPut]
-    public async Task<IActionResult> AddImage(IFormFile uploadedFile)
+    public async Task<IActionResult> AddAvatar(IFormFile uploadedFile)
     {
         if (uploadedFile != null)
         {
-            var path = "/Files/" + uploadedFile.FileName;
+            var path = "/Avatars/" + uploadedFile.FileName;
             using (var fileStream = new FileStream(appEnviroment.WebRootPath + path, FileMode.Create))
             {
                 await uploadedFile.CopyToAsync(fileStream);

@@ -31,7 +31,8 @@ builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<RatingService>();
 builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<TaskService>();
-
+builder.Services.AddScoped<AchievementRepository>();
+builder.Services.AddScoped<AuthorizationService>();
 //создаются раз когда вызываются Transident
 
 

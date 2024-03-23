@@ -66,4 +66,12 @@ public class UserRepository
             new { path, id });
         return await connection.CommandWithResponse<string>(queryObject);
     }
+
+    public async Task<string?> GetPath(int id)
+    {
+        var queryObject = new QueryObject(
+            $"SELECT \"Photo\" FROM users WHERE \"Id\" = @id",
+            new { id });
+        return await connection.FirstOrDefault<string>(queryObject);
+    }
 }
