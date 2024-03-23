@@ -23,6 +23,11 @@ public class TaskService
         return await taskRepository.GetById(id);
     }
 
+    public async Task<TaskCase?> Random()
+    {
+        return await taskRepository.GetByRandom();
+    }
+
     public async Task<TaskCase?> AddTask(TaskDTO task)
     {
         return await taskRepository.AddTask(task);
