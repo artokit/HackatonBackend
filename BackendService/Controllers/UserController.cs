@@ -13,12 +13,13 @@ namespace EducationService.Controllers;
 public class UserController: BaseController
 {
     private readonly UserService userService;
-
-    public UserController(UserService userService)
+    private readonly IWebHostEnvironment appEnviroment;
+    public UserController(UserService userService, IWebHostEnvironment appEnviroment)
     {
         this.userService = userService;
+        this.appEnviroment = appEnviroment;
     }
-    [HttpGet("/my")]
+    [HttpGet("my")]
     public async Task<IActionResult> GetInfo()
     {
         var userExist = await userService.GetById(UserId);
@@ -28,5 +29,24 @@ public class UserController: BaseController
         }
 
         return Ok(userExist);
+    }
+    //[Authorize]
+    [HttpPut]
+    public async Task<IActionResult> AddImage(IFormFile uploadedFile)
+    {
+        if (uploadedFile != null)
+        {
+            var path = "/Files/" + uploadedFile.FileName;
+            using (var fileStream = new FileStream(appEnviroment.WebRootPath + path, FileMode.Create))
+            {
+                await uploadedFile.CopyToAsync(fileStream);
+            }
+
+            return (await userService.GetById(UserId) == null)
+                ? NotFound()
+                : Ok(await userService.PutPath(path, UserId));
+        }
+
+        return BadRequest();
     }
 }

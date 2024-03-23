@@ -14,14 +14,6 @@ public class UserRepository
         this.connection = connection;
     }
 
-    // public async Task<Picture?> AddPicture(Picture picture)
-    // {
-    //     var queryObject = new QueryObject(
-    //         "INSERT INTO USERS(\"Image\") VALUES(@path) returning id",
-    //         new { path = picture.Path });
-    //     return await connection.CommandWithResponse<Picture>(queryObject);
-    // }
-
     public async Task<List<RankingUserDTO?>> GetTop10()
     {
         var queryObject = new QueryObject(
@@ -65,5 +57,13 @@ public class UserRepository
             "SELECT * FROM USERS WHERE \"Email\" = @email",
             new {email});
         return await connection.FirstOrDefault<User>(queryObject);
+    }
+
+    public async Task<string?> PutPath(string path, int id)
+    {
+        var queryObject = new QueryObject(
+            $"UPDATE USERS SET \"Photo\" = @path WHERE \"Id\" = @id RETURNING \"Photo\" ",
+            new { path, id });
+        return await connection.CommandWithResponse<string>(queryObject);
     }
 }

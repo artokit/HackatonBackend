@@ -43,7 +43,7 @@ public class TaskController: BaseController
     }
 
     [HttpPut("update")]
-    // [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> UpdateTask(UpdateTaskDTO task)
     {
         var updatedTask = await taskService.UpdateTask(task);
@@ -55,12 +55,14 @@ public class TaskController: BaseController
     }
     
     [HttpPost("")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> AddTask(TaskDTO task)
     {
         return Ok(await taskService.AddTask(task));
     }
     
     [HttpDelete("")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> DeleteTask(int id)
     {
         var task = await taskService.DeleteTask(id);

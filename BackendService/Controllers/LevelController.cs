@@ -1,5 +1,6 @@
 ﻿using EducationService.Dto;
 using EducationService.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationService.Controllers;
@@ -14,7 +15,7 @@ public class LevelController : BaseController
         this.LevelRepository = LevelRepository;
     }
 
-    // [Authorize]
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult> GetLevel(int id)
     {
@@ -23,14 +24,14 @@ public class LevelController : BaseController
         return (level is null) ? NotFound() : Ok(level);
     }
 
-    // [Authorize]
+    [Authorize]
     [HttpGet("")]
     public async Task<ActionResult> GetAllCategories()
     {
         return Ok(await LevelRepository.GetListLevel());
     }
 
-    // [Authorize]
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteLevel(int id)
     {
@@ -38,7 +39,7 @@ public class LevelController : BaseController
         return (c is null) ? NotFound() : Ok(c);
     }
     
-    // [Authorize]
+    [Authorize(Roles = "admin")]
     [HttpPost("")]
     public async Task<ActionResult> AddLevel(AddLevelDto levelDto)
     {

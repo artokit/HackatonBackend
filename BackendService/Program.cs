@@ -70,4 +70,5 @@ app.UseSwaggerUI();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStaticFiles();
 app.Run();
