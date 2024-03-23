@@ -92,7 +92,6 @@ public class AchievementController: BaseController
         return File(imageFileStream, "image/jpg");
     }
     
-    
     [HttpPost("image")]
     public async Task<IActionResult> AddImage(IFormFile uploadedFile, int id)
     {
