@@ -17,12 +17,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//существуют со старта приложения Singleton
+
 
 builder.Services.AddSingleton<IConfigurationSettings, ConfigurationSettings>();
 builder.Services.AddSingleton<IConnection, Connection>();
 
-//создаются каждый http запрос Scoped
+
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<LevelRepository>();
@@ -35,7 +35,8 @@ builder.Services.AddScoped<AchievementRepository>();
 builder.Services.AddScoped<AchievementService>();
 builder.Services.AddScoped<PortfolioRepository>();
 builder.Services.AddScoped<PortfolioService>();
-//создаются раз когда вызываются Transident
+builder.Services.AddScoped<RangRepository>();
+builder.Services.AddScoped<RangService>();
 
 
 builder.Services
