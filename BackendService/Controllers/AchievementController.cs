@@ -51,7 +51,7 @@ public class AchievementController: BaseController
             return BadRequest();
         }
 
-        return Ok(achievementService.Add(achievementDto));
+        return Ok(await achievementService.Add(achievementDto));
     }
 
     [HttpPut]
@@ -78,7 +78,7 @@ public class AchievementController: BaseController
         return Ok(achievement);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("image/{id}")]
     public async Task<IActionResult> GetImage(int id)
     {
         var path = await achievementService.GetPath(id);
@@ -86,7 +86,7 @@ public class AchievementController: BaseController
         var imageFileStream = System.IO.File.OpenRead(path);
         return File(imageFileStream, "image/jpg");
     }
-    [HttpPut]
+    [HttpPost("image")]
     public async Task<IActionResult> AddImage(IFormFile uploadedFile, int id)
     {
         if (uploadedFile != null)

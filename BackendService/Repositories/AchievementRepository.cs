@@ -24,7 +24,7 @@ public class AchievementRepository
     public async Task<Achievement?> GetById(int id)
     {
         var queryObject = new QueryObject(
-            $"SELECT * FROM \"Achievement\" WHERE \"Id\" = @id",
+            $"SELECT * FROM \"Achievements\" WHERE \"Id\" = @id",
             new { id });
         return await connection.FirstOrDefault<Achievement>(queryObject);
     }
@@ -32,24 +32,22 @@ public class AchievementRepository
     public async Task<Achievement?> GetByName(string name)
     {
         var queryObject = new QueryObject(
-            $"SELECT * FROM \"Achievement\" WHERE \"Name\" = @name RETURNING *",
+            $"SELECT * FROM \"Achievements\" WHERE \"Name\" = @name",
             new { name });
-        return await connection.CommandWithResponse<Achievement>(queryObject);
+        return await connection.FirstOrDefault<Achievement>(queryObject);
     }
 
     public async Task<Achievement?> Add(AchievementDTO achievement)
     {
         var queryObject = new QueryObject(
-            $"INSERT INTO \"Achievement\" (\"Photo\", \"Name\", \"Description\") VALUES(@photo, @name, @description) RETURNING *",
+            $"INSERT INTO \"Achievements\" (\"Photo\", \"Name\", \"Description\") VALUES(@photo, @name, @description) RETURNING *",
             new {photo = achievement.Photo, name = achievement.Name, description = achievement.Description});
-        return await connection.CommandWithResponse<Achievement?>(queryObject);
-
+        return await connection.CommandWithResponse<Achievement>(queryObject);
     }
-    
     public async Task<Achievement?> Update(Achievement achievement)
     {
         var queryObject = new QueryObject(
-            $"UPDATE \"Achievement\" SET \"Photo\" = @photo, \"Name\" = @name, \"Description\" = @description WHERE \"Id\" = @id RETURNING *",
+            $"UPDATE \"Achievements\" SET \"Photo\" = @photo, \"Name\" = @name, \"Description\" = @description WHERE \"Id\" = @id RETURNING *",
             new { photo = achievement.Photo, name = achievement.Name, description = achievement.Description, id = achievement.Id });
         return await connection.CommandWithResponse<Achievement>(queryObject);
     }
@@ -57,7 +55,7 @@ public class AchievementRepository
     public async Task<Achievement?> Delete(int id)
     {
         var queryObject = new QueryObject(
-            $"DELETE FROM \"Achievement\" WHERE \"Id\" = @id RETURNING *",
+            $"DELETE FROM \"Achievements\" WHERE \"Id\" = @id RETURNING *",
             new { id });
         return await connection.CommandWithResponse<Achievement>(queryObject);
     }

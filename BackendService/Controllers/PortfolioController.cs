@@ -44,7 +44,7 @@ public class PortfolioController: BaseController
     [HttpPost]
     public async Task<IActionResult> Add(PortfolioDTO portfolioDto)
     {
-        return Ok(portfolioService.Add(portfolioDto));
+        return Ok(await portfolioService.Add(portfolioDto));
     }
 
     [HttpPut]

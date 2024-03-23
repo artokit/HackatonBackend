@@ -10,7 +10,7 @@ public class PortfolioService
 
     public PortfolioService(PortfolioRepository portfolioRepository)
     {
-        this.portfolioRepository = this.portfolioRepository;
+        this.portfolioRepository = portfolioRepository;
     }
     public async Task<List<Portfolio?>> GetAll()
     {

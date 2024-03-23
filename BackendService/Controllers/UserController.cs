@@ -32,7 +32,7 @@ public class UserController: BaseController
     }
     
     [AllowAnonymous]
-    [HttpGet("image/{id]")]
+    [HttpGet("image/{id}")]
     public async Task<IActionResult> GetImage(int id)
     {
         var path = await userService.GetPath(id);
@@ -41,7 +41,7 @@ public class UserController: BaseController
         return File(imageFileStream, "image/jpg");
     }
     
-    [HttpPut]
+    [HttpPut("image")]
     public async Task<IActionResult> AddAvatar(IFormFile uploadedFile)
     {
         if (uploadedFile != null)
