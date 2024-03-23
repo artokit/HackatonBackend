@@ -1,12 +1,14 @@
 ﻿using EducationService.Dto;
 using EducationService.Models;
 using EducationService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EducationService.Controllers;
 
 [ApiController]
+[Authorize(Roles = "admin")]
 [Route("api/[controller]")]
 public class AchievementController: BaseController
 {
@@ -18,7 +20,8 @@ public class AchievementController: BaseController
         this.appEnviroment = appEnviroment;
         this.achievementService = achievementService;
     }
-
+    
+    [Authorize(Roles = "user")]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -30,6 +33,7 @@ public class AchievementController: BaseController
         return Ok(achievements);
     }
 
+    [Authorize(Roles = "user")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -78,6 +82,7 @@ public class AchievementController: BaseController
         return Ok(achievement);
     }
     
+    [Authorize(Roles = "user")]
     [HttpGet("image/{id}")]
     public async Task<IActionResult> GetImage(int id)
     {
@@ -86,6 +91,8 @@ public class AchievementController: BaseController
         var imageFileStream = System.IO.File.OpenRead(path);
         return File(imageFileStream, "image/jpg");
     }
+    
+    
     [HttpPost("image")]
     public async Task<IActionResult> AddImage(IFormFile uploadedFile, int id)
     {

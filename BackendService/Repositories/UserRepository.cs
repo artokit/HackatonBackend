@@ -66,6 +66,13 @@ public class UserRepository
             new { path, id });
         return await connection.CommandWithResponse<string>(queryObject);
     }
+    public async Task<int?> PutRatingScore(int rating, int id)
+        {
+            var queryObject = new QueryObject(
+                $"UPDATE USERS SET \"RatingScore\" = @rating WHERE \"Id\" = @id RETURNING \"RatingScore\" ",
+                new { rating, id });
+            return await connection.CommandWithResponse<int>(queryObject);
+        }
 
     public async Task<string?> GetPath(int id)
     {

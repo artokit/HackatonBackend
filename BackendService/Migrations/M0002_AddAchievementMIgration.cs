@@ -14,7 +14,6 @@ public class M0002_AddAchievementMIgration: Migration
             .WithColumn("Name").AsString().NotNullable()
             .WithColumn("Description").AsString();
         Create.Table("Portfolio")
-            .WithColumn("Id").AsInt64().NotNullable().Identity().PrimaryKey()
             .WithColumn("AchievementId").AsInt64().NotNullable()
             .WithColumn("UserId").AsInt64().NotNullable();
         Create.ForeignKey().FromTable("Portfolio").ForeignColumn("AchievementId").ToTable("Achievements")

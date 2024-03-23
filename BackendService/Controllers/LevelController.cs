@@ -1,5 +1,6 @@
 ﻿using EducationService.Dto;
 using EducationService.Repositories;
+using EducationService.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace EducationService.Controllers;
 public class LevelController : BaseController
 {
     private readonly LevelRepository LevelRepository;
-    
-    public LevelController(LevelRepository LevelRepository)
+    private readonly UserService userService;
+
+    public LevelController(LevelRepository LevelRepository, UserService userService)
     {
         this.LevelRepository = LevelRepository;
+        this.userService = userService;
     }
 
     [Authorize]
@@ -20,7 +23,7 @@ public class LevelController : BaseController
     public async Task<ActionResult> GetLevel(int id)
     {
         var level = await LevelRepository.GetLevel(id);
-        
+
         return (level is null) ? NotFound() : Ok(level);
     }
 
@@ -38,7 +41,7 @@ public class LevelController : BaseController
         var c = await LevelRepository.DeleteLevel(id);
         return (c is null) ? NotFound() : Ok(c);
     }
-    
+
     [Authorize(Roles = "admin")]
     [HttpPost("")]
     public async Task<ActionResult> AddLevel(AddLevelDto levelDto)
@@ -46,4 +49,21 @@ public class LevelController : BaseController
         var c = await LevelRepository.AddLevel(levelDto.Name, levelDto.Award);
         return Ok(c);
     }
+
+    [Authorize]
+    [HttpPut("solve/{id}")]
+    public async Task<IActionResult> SolveAward(int id)
+    {
+        var user = await userService.GetById(UserId);
+        var level = await LevelRepository.GetLevel(id);
+        if (user == null || level == null)
+        {
+            return NotFound();
+        }
+
+        var rating= user.RatingScore + level.Award;
+        return Ok(await userService.PutRatingScore(rating, UserId));
+
+    }
+
 }
