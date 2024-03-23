@@ -24,14 +24,17 @@ builder.Services.AddSingleton<IConnection, Connection>();
 
 //создаются каждый http запрос Scoped
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<LevelRepository>();
 builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<RatingService>();
 builder.Services.AddScoped<TaskRepository>();
 builder.Services.AddScoped<TaskService>();
-
+builder.Services.AddScoped<AchievementRepository>();
+builder.Services.AddScoped<AchievementService>();
+builder.Services.AddScoped<PortfolioRepository>();
+builder.Services.AddScoped<PortfolioService>();
 //создаются раз когда вызываются Transident
 
 
@@ -70,4 +73,5 @@ app.UseSwaggerUI();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStaticFiles();
 app.Run();

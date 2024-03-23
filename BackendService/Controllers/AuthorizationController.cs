@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace EducationService.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthorizationController : BaseController
 {
     private readonly AuthorizationService authorizationService;

@@ -48,4 +48,18 @@ public class UserService
 
         return ValidationUserStatus.Success;
     }
+
+    public async Task<string?> PutPath(string path, int id)
+    {
+        return await userRepository.PutPath(path, id);
+    }
+
+    public async Task<int?> PutRatingScore(int rating, int id)
+    {
+        return await userRepository.PutRatingScore(rating, id);
+    }
+    public async Task<string?> GetPath(int id)
+    {
+        return await userRepository.GetPath(id);
+    }
 }

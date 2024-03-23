@@ -14,7 +14,7 @@ public class CategoryController : BaseController
         this.categoryRepository = categoryRepository;
     }
 
-    // [Authorize]
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult> GetCategory(int id)
     {
@@ -23,14 +23,14 @@ public class CategoryController : BaseController
         return (category is null) ? NotFound() : Ok(category);
     }
 
-    // [Authorize]
+    [Authorize]
     [HttpGet("")]
     public async Task<ActionResult> GetAllCategories()
     {
         return Ok(await categoryRepository.GetListCategory());
     }
 
-    // [Authorize]
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCategory(int id)
     {
@@ -38,7 +38,7 @@ public class CategoryController : BaseController
         return (c is null) ? NotFound() : Ok(c);
     }
     
-    // [Authorize]
+    [Authorize(Roles = "admin")]
     [HttpPost("")]
     public async Task<ActionResult> AddCategory(string name)
     {
