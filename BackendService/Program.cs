@@ -3,6 +3,7 @@ using Common;
 using Common.Interfaces;
 using Database;
 using Database.Interfaces;
+using EducationService.Hubs;
 using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -59,7 +60,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 builder.Services.AddAuthorization();
-
+builder.Services.AddSignalR();
 var app = builder.Build();
 var serviceProvider = app.Services.CreateScope().ServiceProvider;
 
@@ -74,4 +75,5 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
+app.MapHub<VersusHub>("versus");
 app.Run();
