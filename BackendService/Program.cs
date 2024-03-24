@@ -62,7 +62,10 @@ var serviceProvider = app.Services.CreateScope().ServiceProvider;
 
 var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 runner.MigrateUp();
-
+app.UseCors(x => x.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(origin => true) // allow any origin
+                    .AllowCredentials());
 app.UseHttpsRedirection();
 app.MapControllers();
 app.UseSwagger();
