@@ -43,4 +43,23 @@ public class RangService
         return await rangRepository.GetImage(id);
     }
     
+    public async Task<UserDTO?> GetUserWithRang(int id)
+    {
+        var user = await userService.GetById(id);
+        if (user == null)
+        {
+            return null;
+        }
+        var rang = await GetRang(user.RangId);
+        var u = new UserDTO
+        {
+            Username = user.Username,
+            Email = user.Email,
+            Photo = user.Photo,
+            RatingScore = user.RatingScore,
+            Rang = rang
+        };
+        return u;
+    }
+    
 }

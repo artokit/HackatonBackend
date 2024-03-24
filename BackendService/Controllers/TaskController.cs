@@ -31,9 +31,9 @@ public class TaskController: BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetInfo(int id)
     {
-        var task = await taskService.GetById(id);
+        var task = await taskService.GetAdvancedTask(id);
         if (task == null)
         {
             return BadRequest();

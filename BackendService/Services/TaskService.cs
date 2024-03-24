@@ -10,15 +10,18 @@ public class TaskService
     private readonly LevelService levelService;
     private readonly UserService userService;
     private readonly RangService rangService;
+    private readonly CategoryRepository categoryRepository;
 
-    public TaskService(LevelService levelService, UserService userService, RangService rangService, TaskRepository taskRepository)
+    public TaskService(LevelService levelService, UserService userService, 
+        RangService rangService, TaskRepository taskRepository, CategoryRepository categoryRepository)
     {
         this.levelService = levelService;
         this.userService = userService;
         this.rangService = rangService;
         this.taskRepository = taskRepository;
+        this.categoryRepository = categoryRepository;
     }
-    public async Task<List<TaskCase?>> GetAll()
+    public async Task<List<AdvancedTaskDTO?>> GetAll()
     {
         return await taskRepository.GetAll();
     }
@@ -28,6 +31,22 @@ public class TaskService
         return await taskRepository.GetById(id);
     }
 
+    public async Task<AdvancedTaskDTO?> GetAdvancedTask(int id)
+    {
+        var task = await GetById(id);
+        if (task == null)
+        {
+            return null;
+        }
+
+        var level = await levelService.GetLevel(task.LevelId);
+        var category = await categoryRepository.GetCategory(task.CategoryId);
+        return new AdvancedTaskDTO
+        {
+            Level = level, Category = category, RightAnswer = task.RightAnswer, Content = task.Content
+        };
+    }
+    
     public async Task<TaskCase?> Random()
     {
         return await taskRepository.GetByRandom();
@@ -46,7 +65,7 @@ public class TaskService
             return null;
         }
 
-        var t = new TaskCase
+        var t = new UpdateTaskDTO
         {
             Id=task.Id,
             LevelId = task.LevelId ?? currentTask.LevelId,
@@ -64,7 +83,7 @@ public class TaskService
 
     public async Task<RangResponseDTO?> Solve(int id, string answer, int userId)
     {
-        var task = await taskRepository.GetById(id);
+        var task = await GetAdvancedTask(id);
         if (task == null || answer != task.RightAnswer)
         {
             return null;
@@ -73,11 +92,11 @@ public class TaskService
 
     }
 
-    private async Task<RangResponseDTO?> SolveAward(TaskCase task, int userId)
+    private async Task<RangResponseDTO?> SolveAward(AdvancedTaskDTO task, int userId)
     {
         var user = await userService.GetById(userId);
-        var level = await levelService.GetLevel(task.LevelId);
-        if (user == null || level == null)
+        var level = task.Level;
+        if (user == null)
         {
             return null;
         }
