@@ -49,9 +49,29 @@ public class UserService
         return ValidationUserStatus.Success;
     }
 
+    public async Task<AuthUpdateDTO?> Update(int id, AuthUpdateDTO authUpdateDto)
+    {
+        var user = await userRepository.GetById(id);
+        if (user is null)
+        {
+            return null;
+        }
+        var u = new AuthUpdateDTO
+        {
+            Username = authUpdateDto.Username ?? user.Username,
+            Email = authUpdateDto.Email ?? user.Email,
+        };
+        return await userRepository.Update(id, u);
+    }
+    
     public async Task<string?> PutPath(string path, int id)
     {
         return await userRepository.PutPath(path, id);
+    }
+
+    public void PutRang(Rang rang, int id)
+    {
+        userRepository.PutRang(rang,id);
     }
 
     public async Task<int?> PutRatingScore(int rating, int id)

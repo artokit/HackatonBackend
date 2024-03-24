@@ -25,7 +25,7 @@ public class UserRepository
     {
         var queryObject = new QueryObject(
             @"SELECT  ""Id"", ""Username"", ""RatingScore"" FROM USERS ORDER BY ""RatingScore"" DESC");
-        return await connection.ListOrEmpty<RankingUserDTO>(queryObject);
+        return await connection.ListOrEmpty<RankingUserDTO?>(queryObject);
     }
     public async Task<User?> AddUser(RegisterDto user)
     {
@@ -51,12 +51,21 @@ public class UserRepository
         return await connection.FirstOrDefault<User>(queryObject);
     }
 
+
     public async Task<User?> GetByEmail(string email)
     {
         var queryObject = new QueryObject(
             "SELECT * FROM USERS WHERE \"Email\" = @email",
             new {email});
         return await connection.FirstOrDefault<User>(queryObject);
+    }
+
+    public async Task<AuthUpdateDTO?> Update(int id,AuthUpdateDTO authUpdateDto)
+    {
+        var queryObject = new QueryObject(
+            $"UPDATE users SET \"Username\"=@username, \"Email\"=@email WHERE \"Id\" = @id RETURNING \"Username\", \"Email\"",
+            new { id, username = authUpdateDto.Username, email = authUpdateDto.Email });
+        return await connection.CommandWithResponse<AuthUpdateDTO>(queryObject);
     }
 
     public async Task<string?> PutPath(string path, int id)
@@ -74,6 +83,16 @@ public class UserRepository
             return await connection.CommandWithResponse<int>(queryObject);
         }
 
+    public void PutRang(Rang rang, int id)
+    {
+        var rangDown = rang.Id - 1;
+        var rangUp = rang.Id + 1;
+        var queryObject = new QueryObject(
+            $"UPDATE USERS SET \"Rang\" = CASE WHEN \"RatingScore\" >= @maxScore AND \"RatingScore\" < 5 THEN @rangUp WHEN \"RatingScore\" < @minScore AND \"RatingScore\" > 1 THEN @rangDown",
+            new { maxScore = rang.MaxScore, minScore = rang.MinScore, rangUp, rangDown });
+        connection.Command(queryObject);
+    }
+
     public async Task<string?> GetPath(int id)
     {
         var queryObject = new QueryObject(
@@ -81,4 +100,5 @@ public class UserRepository
             new { id });
         return await connection.FirstOrDefault<string>(queryObject);
     }
+    
 }

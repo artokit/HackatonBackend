@@ -35,4 +35,12 @@ public class RangRepository
             "UPDATE \"Rangs\" SET \"ImagePath\" = @imagePath where \"Id\" = @id RETURNING *", new {imagePath, id});
         return await connection.FirstOrDefault<Rang>(queryObject);
     }
+
+    public async Task<string?> GetImage(int id)
+    {
+        var queryObject = new QueryObject(
+            $"SELECT \"ImagePath\" FROM \"Rangs\" WHERE \"Id\" = @id",
+            new { id });
+        return await connection.FirstOrDefault<string>(queryObject);
+    }
 }

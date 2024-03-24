@@ -27,6 +27,7 @@ builder.Services.AddSingleton<IConnection, Connection>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<LevelRepository>();
+builder.Services.AddScoped<LevelService>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<RatingService>();

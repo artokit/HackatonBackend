@@ -68,4 +68,16 @@ public class TaskController: BaseController
         var task = await taskService.DeleteTask(id);
         return (task is null) ? NotFound() : Ok(task);
     }
+    //[Authorize]
+    [HttpPut("solve/{id}")]
+    public async Task<IActionResult> Solve(int id, string answer, int userId)
+    {
+        var rangId = await taskService.Solve(id, answer, userId);
+        if (rangId is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(rangId);
+    }
 }
