@@ -14,16 +14,18 @@ namespace EducationService.Controllers;
 public class UserController: BaseController
 {
     private readonly UserService userService;
+    private readonly RangService rangService;
     private readonly IWebHostEnvironment appEnviroment;
-    public UserController(UserService userService, IWebHostEnvironment appEnviroment)
+    public UserController(UserService userService, RangService rangService, IWebHostEnvironment appEnviroment)
     {
         this.userService = userService;
+        this.rangService = rangService;
         this.appEnviroment = appEnviroment;
     }
     [HttpGet("my")]
     public async Task<IActionResult> GetInfo()
     {
-        var userExist = await userService.GetById(UserId);
+        var userExist = await rangService.GetUserWithRang(UserId);
         if (userExist == null)
         {
             return BadRequest();

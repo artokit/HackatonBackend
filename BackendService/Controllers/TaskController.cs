@@ -12,13 +12,15 @@ namespace EducationService.Controllers;
 public class TaskController: BaseController
 {
     private readonly TaskService taskService;
+    private readonly IWebHostEnvironment appEnviroment;
 
-    public TaskController(TaskService taskService)
+    public TaskController(TaskService taskService, IWebHostEnvironment appEnviroment)
     {
         this.taskService = taskService;
+        this.appEnviroment = appEnviroment;
     }
 
-    [HttpGet]
+    [HttpGet] //TODO: сделать так, чтобы возвращался AdvancedTaskDTO
     public async Task<IActionResult> GetAll()
     {
         var tasks = await taskService.GetAll();
@@ -31,9 +33,9 @@ public class TaskController: BaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetInfo(int id)
     {
-        var task = await taskService.GetById(id);
+        var task = await taskService.GetAdvancedTask(id);
         if (task == null)
         {
             return BadRequest();
@@ -42,6 +44,16 @@ public class TaskController: BaseController
         return Ok(task);
     }
 
+
+    [HttpGet("files/{id}")]
+    public async Task<IActionResult> GetZip(int id)
+    {
+        var path = await taskService.GetZip(id);
+        path = appEnviroment.WebRootPath + path;
+        var imageFileSystem = System.IO.File.OpenRead(path);
+        return File(imageFileSystem, "application/zip");
+    }
+    
     [HttpPut]
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> UpdateTask(UpdateTaskDTO task)
@@ -52,6 +64,13 @@ public class TaskController: BaseController
             return NotFound();
         }
         return Ok(updatedTask);
+    }
+
+    [HttpPut("files/")]
+    public async Task<IActionResult> AddZip(int id, IFormFile file)
+    {
+        var res = await taskService.AddZip(id, file);
+        return (res is null) ? NotFound() : Ok(res);
     }
     
     [HttpPost]

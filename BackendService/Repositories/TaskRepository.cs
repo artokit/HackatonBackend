@@ -14,11 +14,11 @@ public class TaskRepository
         this.connection = connection;
     }
 
-    public async Task<List<TaskCase?>> GetAll()
+    public async Task<List<TaskJoinDTO?>> GetAll()
     {
         var queryObject = new QueryObject(
-            $"SELECT * FROM \"Tasks\"");
-        return await connection.ListOrEmpty<TaskCase?>(queryObject);
+            $"SELECT * FROM \"Tasks\" JOIN \"Levels\" ON \"Tasks\".\"LevelId\" = \"Levels\".\"Id\"");
+        return await connection.ListOrEmpty<TaskJoinDTO?>(queryObject);
     }
 
     public async Task<TaskCase?> GetById(int id)
@@ -50,10 +50,11 @@ public class TaskRepository
         return await connection.CommandWithResponse<TaskCase>(queryObject);
     }
 
-    public async Task<TaskCase> UpdateTask(TaskCase task)
+    public async Task<TaskCase> UpdateTask(UpdateTaskDTO task)
     {
         var queryObject = new QueryObject(
-            "UPDATE \"Tasks\" SET \"LevelId\"=@LevelId, \"CategoryId\"=@CategoryId, \"RightAnswer\"=@RightAnswer, \"Content\"=@Content WHERE \"Id\" = @id RETURNING *", 
+            "UPDATE \"Tasks\" SET \"LevelId\" = @LevelId, \"CategoryId\" = @CategoryId, \"RightAnswer\" = @RightAnswer, " +
+            "\"Content\" = @Content WHERE \"Id\" = @id RETURNING \"LevelId\", \"CategoryId\", \"RightAnswer\", \"Content\"", 
             new {task.LevelId, task.CategoryId, task.RightAnswer, task.Content, task.Id});
         return await connection.CommandWithResponse<TaskCase>(queryObject);
     }
@@ -65,5 +66,21 @@ public class TaskRepository
             new { id });
         return await connection.FirstOrDefault<TaskCase?>(queryObject);
     }
+
+    public async Task<TaskCase?> UpdateImage(int id, string path)
+    {
+        var queryObject = new QueryObject(
+            "UPDATE \"Tasks\" SET \"PathFile\" = @zipPath where \"Id\" = @id RETURNING *", 
+            new {zipPath = path, id});
+        return await connection.FirstOrDefault<TaskCase>(queryObject);
     
+    }
+
+    public async Task<string?> GetZip(int id)
+    {
+        var queryObject = new QueryObject(
+            $"SELECT \"PathFile\" FROM \"Tasks\" WHERE \"Id\" = @id",
+            new { id });
+        return await connection.FirstOrDefault<string>(queryObject);
+    }
 }
