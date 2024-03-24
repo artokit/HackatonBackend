@@ -16,8 +16,8 @@ public class M0003_AddRangMigration : AutoReversingMigration
 
         
         
-        Create.ForeignKey()
-            .FromTable("users").ForeignColumn("RangId")
-            .ToTable("Rangs").PrimaryColumn("Id");
+        // Create.ForeignKey()
+        //     .FromTable("users").ForeignColumn("RangId")
+        //     .ToTable("Rangs").PrimaryColumn("Id");
     }
 }

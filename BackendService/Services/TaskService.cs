@@ -11,17 +11,19 @@ public class TaskService
     private readonly UserService userService;
     private readonly RangService rangService;
     private readonly CategoryRepository categoryRepository;
-
+    private readonly IWebHostEnvironment appEnvironment;
     public TaskService(LevelService levelService, UserService userService, 
-        RangService rangService, TaskRepository taskRepository, CategoryRepository categoryRepository)
+        RangService rangService, TaskRepository taskRepository, CategoryRepository categoryRepository,
+        IWebHostEnvironment appEnvironment)
     {
         this.levelService = levelService;
         this.userService = userService;
         this.rangService = rangService;
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
+        this.appEnvironment = appEnvironment;
     }
-    public async Task<List<TaskCase?>> GetAll()
+    public async Task<List<TaskJoinDTO?>> GetAll()
     {
         return await taskRepository.GetAll();
     }
@@ -55,6 +57,21 @@ public class TaskService
     public async Task<TaskCase?> AddTask(TaskDTO task)
     {
         return await taskRepository.AddTask(task);
+    }
+
+    public async Task<string?> GetZip(int id)
+    {
+        return await taskRepository.GetZip(id);
+    }
+    public async Task<TaskCase?> AddZip(int id, IFormFile uploadedFile)
+    {
+        var path = "/Tasks/" + uploadedFile.FileName; 
+        using (var fileStream = new FileStream(appEnvironment.WebRootPath + path, FileMode.Create))
+        {
+            await uploadedFile.CopyToAsync(fileStream);
+        }
+
+        return await taskRepository.UpdateImage(id, path);
     }
 
     public async Task<TaskCase?> UpdateTask(UpdateTaskDTO task)

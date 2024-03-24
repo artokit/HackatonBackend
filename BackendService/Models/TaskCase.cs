@@ -7,4 +7,5 @@ public class TaskCase
     public int CategoryId { get; set; }
     public string RightAnswer { get; set; }
     public string Content { get; set; }
+    public string PathFile { get; set; }
 }

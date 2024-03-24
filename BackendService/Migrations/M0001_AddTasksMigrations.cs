@@ -15,13 +15,14 @@ public class M0001_AddTasksMigrations : AutoReversingMigration
             .WithColumn("Id").AsInt64().Unique().PrimaryKey().Identity()
             .WithColumn("Name").AsString()
             .WithColumn("Award").AsInt64();
-        
+
         Create.Table("Tasks")
             .WithColumn("Id").AsInt64().Unique().PrimaryKey().Identity()
             .WithColumn("LevelId").AsInt64()
             .WithColumn("CategoryId").AsInt64()
             .WithColumn("RightAnswer").AsString()
-            .WithColumn("Content").AsString();
+            .WithColumn("Content").AsString()
+            .WithColumn("PathFile").AsString().Nullable();
 
         Create.ForeignKey()
             .FromTable("Tasks").ForeignColumn("LevelId")
