@@ -54,6 +54,11 @@ public class TaskService
         return await taskRepository.GetByRandom();
     }
 
+    public async Task<TaskCase?> RandomOnLevel(int levelId)
+    {
+        return await taskRepository.GetByRandomLevel(levelId);
+    }
+
     public async Task<TaskCase?> AddTask(TaskDTO task)
     {
         return await taskRepository.AddTask(task);

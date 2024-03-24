@@ -20,7 +20,7 @@ public class TaskController: BaseController
         this.appEnviroment = appEnviroment;
     }
 
-    [HttpGet] //TODO: сделать так, чтобы возвращался AdvancedTaskDTO
+    [HttpGet] //TODO: сделать так, чтобы возвращался TaskJoinDTO
     public async Task<IActionResult> GetAll()
     {
         var tasks = await taskService.GetAll();
@@ -31,7 +31,7 @@ public class TaskController: BaseController
 
         return Ok(tasks);
     }
-
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetInfo(int id)
     {
@@ -44,6 +44,29 @@ public class TaskController: BaseController
         return Ok(task);
     }
 
+    [HttpGet("random")]
+    public async Task<IActionResult> GetRandom()
+    {
+        var task = await taskService.Random();
+        if (task is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(task);
+    }
+
+    [HttpGet("random/{leveId}")]
+    public async Task<IActionResult> GetRandomOnLevel(int leveId)
+    {
+        var task = await taskService.RandomOnLevel(leveId);
+        if (task is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(task);
+    }
 
     [HttpGet("files/{id}")]
     public async Task<IActionResult> GetZip(int id)
