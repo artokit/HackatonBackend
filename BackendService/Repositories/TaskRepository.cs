@@ -36,6 +36,14 @@ public class TaskRepository
         return await connection.FirstOrDefault<TaskCase>(queryObject);
     }
 
+    public async Task<TaskCase?> GetByRandomLevel(int levelId)
+    {
+        var queryObject = new QueryObject(
+            $"SELECT * FROM \"Tasks\" WHERE \"LevelId\" = @levelId ORDER BY random()",
+            new { levelId });
+        return await connection.FirstOrDefault<TaskCase>(queryObject);
+    }
+
     public async Task<TaskCase?> AddTask(TaskDTO task)
     {
         var queryObject = new QueryObject(
