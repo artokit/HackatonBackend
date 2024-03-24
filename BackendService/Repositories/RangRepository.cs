@@ -17,7 +17,7 @@ public class RangRepository
 
     public async Task<Rang?> GetRang(int id)
     {
-        var queryObject = new QueryObject("SELECT * FROM \"Rangs\"", new { id });
+        var queryObject = new QueryObject("SELECT * FROM \"Rangs\" WHERE \"Id\" = @id", new { id });
         return await connection.FirstOrDefault<Rang>(queryObject);
     }
     
@@ -34,5 +34,13 @@ public class RangRepository
         var queryObject = new QueryObject(
             "UPDATE \"Rangs\" SET \"ImagePath\" = @imagePath where \"Id\" = @id RETURNING *", new {imagePath, id});
         return await connection.FirstOrDefault<Rang>(queryObject);
+    }
+
+    public async Task<string?> GetImage(int id)
+    {
+        var queryObject = new QueryObject(
+            $"SELECT \"ImagePath\" FROM \"Rangs\" WHERE \"Id\" = @id",
+            new { id });
+        return await connection.FirstOrDefault<string>(queryObject);
     }
 }

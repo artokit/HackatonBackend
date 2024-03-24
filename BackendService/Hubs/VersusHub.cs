@@ -8,12 +8,10 @@ namespace EducationService.Hubs;
 public class VersusHub : Hub
 {
     private readonly TaskService taskService;
-    private readonly LevelController levelController;
 
-    public VersusHub(TaskService taskService, LevelController levelController)
+    public VersusHub(TaskService taskService)
     {
         this.taskService = taskService;
-        this.levelController = levelController;
     }
 
 public async Task CreateAndAddToGroup(string user1connectionId, string user2connectionId)
@@ -30,13 +28,13 @@ public async Task CreateAndAddToGroup(string user1connectionId, string user2conn
         var task = taskService.Random();
         await Clients.Groups(groupName).SendAsync("receive", task);
     }
-
+    //TODO: Сделать версус с убавлением рейтинга
     public async Task CompareAnswersAndRemoveUsers(string groupName, string UserId, string answer, TaskCase taskCase)
     {
         if (answer == taskCase.RightAnswer)
         {
             await Clients.Groups(groupName).SendAsync("receive", $"{UserId} победил!");
-            await levelController.SolveAward(Convert.ToInt32(UserId));
+            await taskService.Solve(taskCase.Id, answer, Convert.ToInt32(UserId));
         }
         else
         {

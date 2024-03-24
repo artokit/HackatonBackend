@@ -5,7 +5,7 @@ namespace EducationService.Repositories;
 
 public class LevelRepository
 {
-    private IConnection connection;
+    private readonly IConnection connection;
 
     public LevelRepository(IConnection connection)
     {

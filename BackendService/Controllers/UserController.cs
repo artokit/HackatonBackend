@@ -1,5 +1,6 @@
 ﻿using Database.Interfaces;
 using System.Web;
+using EducationService.Dto;
 using EducationService.Models;
 using EducationService.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -58,5 +59,12 @@ public class UserController: BaseController
         }
 
         return BadRequest();
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update(AuthUpdateDTO authUpdateDto)
+    {
+        var user = await userService.Update(UserId, authUpdateDto);
+        return (user is null) ? NotFound() : Ok(user);
     }
 }

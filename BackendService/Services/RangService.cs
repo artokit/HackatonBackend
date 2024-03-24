@@ -7,12 +7,14 @@ namespace EducationService.Services;
 public class RangService
 {
     private RangRepository rangRepository;
+    private UserService userService;
     private IWebHostEnvironment appEnvironment;
     
-    public RangService(RangRepository rangRepository, IWebHostEnvironment appEnvironment)
+    public RangService(RangRepository rangRepository, IWebHostEnvironment appEnvironment, UserService userService)
     {
         this.appEnvironment = appEnvironment;
         this.rangRepository = rangRepository;
+        this.userService = userService;
     }
 
     public async Task<Rang?> GetRang(int id)
@@ -35,4 +37,10 @@ public class RangService
 
         return await rangRepository.UpdateImage(id, path);
     }
+
+    public async Task<string?> GetImage(int id)
+    {
+        return await rangRepository.GetImage(id);
+    }
+    
 }

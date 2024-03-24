@@ -15,7 +15,8 @@ public class M0000_InitialMigration : Migration
             .WithColumn("Password").AsString().NotNullable()
             .WithColumn("Email").AsString().Unique().NotNullable()
             .WithColumn("RatingScore").AsInt64().NotNullable().WithDefaultValue(0)
-            .WithColumn("Role").AsString().NotNullable().WithDefaultValue("user");
+            .WithColumn("Role").AsString().NotNullable().WithDefaultValue("user")
+            .WithColumn("RangId").AsInt64().NotNullable().WithDefaultValue(1);
     }
 
     public override void Down()

@@ -25,7 +25,7 @@ public class UserRepository
     {
         var queryObject = new QueryObject(
             @"SELECT  ""Id"", ""Username"", ""RatingScore"" FROM USERS ORDER BY ""RatingScore"" DESC");
-        return await connection.ListOrEmpty<RankingUserDTO>(queryObject);
+        return await connection.ListOrEmpty<RankingUserDTO?>(queryObject);
     }
     public async Task<User?> AddUser(RegisterDto user)
     {
@@ -46,10 +46,11 @@ public class UserRepository
     public async Task<User?> GetById(int id)
     {
         var queryObject = new QueryObject(
-            "SELECT \"Id\", \"Username\", \"Password\", \"Email\", \"RatingScore\" FROM USERS WHERE \"Id\" = @id",
+            "SELECT * FROM USERS WHERE \"Id\" = @id",
             new { id });
         return await connection.FirstOrDefault<User>(queryObject);
     }
+
 
     public async Task<User?> GetByEmail(string email)
     {
@@ -57,6 +58,14 @@ public class UserRepository
             "SELECT * FROM USERS WHERE \"Email\" = @email",
             new {email});
         return await connection.FirstOrDefault<User>(queryObject);
+    }
+
+    public async Task<AuthUpdateDTO?> Update(int id,AuthUpdateDTO authUpdateDto)
+    {
+        var queryObject = new QueryObject(
+            $"UPDATE users SET \"Username\"=@username, \"Email\"=@email WHERE \"Id\" = @id RETURNING \"Username\", \"Email\"",
+            new { id, username = authUpdateDto.Username, email = authUpdateDto.Email });
+        return await connection.CommandWithResponse<AuthUpdateDTO>(queryObject);
     }
 
     public async Task<string?> PutPath(string path, int id)
@@ -74,6 +83,24 @@ public class UserRepository
             return await connection.CommandWithResponse<int>(queryObject);
         }
 
+    public async Task<int> PutRang(int ratingScore, Rang rang, int id)
+    {
+        var rangChange = rang.Id;
+        if (ratingScore > rang.MaxScore && rangChange < 5)
+        {
+            rangChange += 1;
+        }
+
+        if (ratingScore < rang.MinScore && rangChange > 1)
+        {
+            rangChange -= 1;
+        }
+        var queryObject = new QueryObject(
+            $"UPDATE USERS SET \"RangId\"= @rangChange WHERE \"Id\" = @id RETURNING \"RangId\" ",
+            new { rangChange, id });
+        return await connection.CommandWithResponse<int>(queryObject);
+    }
+
     public async Task<string?> GetPath(int id)
     {
         var queryObject = new QueryObject(
@@ -81,4 +108,5 @@ public class UserRepository
             new { id });
         return await connection.FirstOrDefault<string>(queryObject);
     }
+    
 }
