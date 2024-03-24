@@ -21,7 +21,7 @@ public class TaskService
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
     }
-    public async Task<List<AdvancedTaskDTO?>> GetAll()
+    public async Task<List<TaskCase?>> GetAll()
     {
         return await taskRepository.GetAll();
     }
