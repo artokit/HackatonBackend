@@ -62,7 +62,7 @@ public class TaskService
         return await taskRepository.DeleteTask(id);
     }
 
-    public async Task<int?> Solve(int id, string answer, int userId)
+    public async Task<RangResponseDTO?> Solve(int id, string answer, int userId)
     {
         var task = await taskRepository.GetById(id);
         if (task == null || answer != task.RightAnswer)
@@ -73,7 +73,7 @@ public class TaskService
 
     }
 
-    private async Task<int?> SolveAward(TaskCase task, int userId)
+    private async Task<RangResponseDTO?> SolveAward(TaskCase task, int userId)
     {
         var user = await userService.GetById(userId);
         var level = await levelService.GetLevel(task.LevelId);
@@ -82,14 +82,40 @@ public class TaskService
             return null;
         }
         var rang = await rangService.GetRang(user.RangId);
+        
         if (rang == null)
         {
             return null;
         }
-        var rating= user.RatingScore + level.Award;
-        var ratingScore = await userService.PutRatingScore(rating, user.Id);
-        userService.PutRang(rang, user.RangId);
-        return ratingScore;
+        var ratingScore = await userService.PutRatingScore(user.RatingScore + level.Award, user.Id);
+        var userRang = await userService.PutRang(ratingScore ?? 0, rang, user.Id);
+        return new RangResponseDTO
+        {
+            RatingScore = ratingScore ?? 0,
+            UserRang = userRang
+        };
+    }
 
+    public async Task<RangResponseDTO?> SolvePunish(TaskCase task, int userId)
+    {
+    var user = await userService.GetById(userId);
+    var level = await levelService.GetLevel(task.LevelId);
+        if (user == null || level == null)
+    {
+        return null;
+    }
+    var rang = await rangService.GetRang(user.RangId);
+        if (rang == null)
+    {
+        return null;
+    }
+    var rating= user.RatingScore - level.Award;
+    var ratingScore = await userService.PutRatingScore(rating, user.Id);
+    var userRang = await userService.PutRang(ratingScore ?? 0, rang, user.Id);
+    return new RangResponseDTO
+    {
+        RatingScore = ratingScore ?? 0,
+        UserRang = userRang
+    };
     }
 }

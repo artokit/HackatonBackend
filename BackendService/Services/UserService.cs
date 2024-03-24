@@ -69,9 +69,9 @@ public class UserService
         return await userRepository.PutPath(path, id);
     }
 
-    public void PutRang(Rang rang, int id)
+    public async Task<int> PutRang(int ratingScore, Rang rang, int id)
     {
-        userRepository.PutRang(rang,id);
+        return await userRepository.PutRang(ratingScore, rang, id);
     }
 
     public async Task<int?> PutRatingScore(int rating, int id)

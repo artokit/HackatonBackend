@@ -72,12 +72,12 @@ public class TaskController: BaseController
     [HttpPut("solve/{id}")]
     public async Task<IActionResult> Solve(int id, string answer, int userId)
     {
-        var rangId = await taskService.Solve(id, answer, userId);
-        if (rangId is null)
+        var rangResponse = await taskService.Solve(id, answer, userId);
+        if (rangResponse is null)
         {
             return NotFound();
         }
 
-        return Ok(rangId);
+        return Ok(rangResponse);
     }
 }

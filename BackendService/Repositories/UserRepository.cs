@@ -46,7 +46,7 @@ public class UserRepository
     public async Task<User?> GetById(int id)
     {
         var queryObject = new QueryObject(
-            "SELECT \"Id\", \"Username\", \"Password\", \"Email\", \"RatingScore\" FROM USERS WHERE \"Id\" = @id",
+            "SELECT * FROM USERS WHERE \"Id\" = @id",
             new { id });
         return await connection.FirstOrDefault<User>(queryObject);
     }
@@ -83,14 +83,22 @@ public class UserRepository
             return await connection.CommandWithResponse<int>(queryObject);
         }
 
-    public void PutRang(Rang rang, int id)
+    public async Task<int> PutRang(int ratingScore, Rang rang, int id)
     {
-        var rangDown = rang.Id - 1;
-        var rangUp = rang.Id + 1;
+        var rangChange = rang.Id;
+        if (ratingScore > rang.MaxScore && rangChange < 5)
+        {
+            rangChange += 1;
+        }
+
+        if (ratingScore < rang.MinScore && rangChange > 1)
+        {
+            rangChange -= 1;
+        }
         var queryObject = new QueryObject(
-            $"UPDATE USERS SET \"Rang\" = CASE WHEN \"RatingScore\" >= @maxScore AND \"RatingScore\" < 5 THEN @rangUp WHEN \"RatingScore\" < @minScore AND \"RatingScore\" > 1 THEN @rangDown",
-            new { maxScore = rang.MaxScore, minScore = rang.MinScore, rangUp, rangDown });
-        connection.Command(queryObject);
+            $"UPDATE USERS SET \"RangId\"= @rangChange WHERE \"Id\" = @id RETURNING \"RangId\" ",
+            new { rangChange, id });
+        return await connection.CommandWithResponse<int>(queryObject);
     }
 
     public async Task<string?> GetPath(int id)

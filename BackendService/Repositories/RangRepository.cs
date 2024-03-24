@@ -17,7 +17,7 @@ public class RangRepository
 
     public async Task<Rang?> GetRang(int id)
     {
-        var queryObject = new QueryObject("SELECT * FROM \"Rangs\"", new { id });
+        var queryObject = new QueryObject("SELECT * FROM \"Rangs\" WHERE \"Id\" = @id", new { id });
         return await connection.FirstOrDefault<Rang>(queryObject);
     }
     
