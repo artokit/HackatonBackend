@@ -21,7 +21,6 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\Achievement\" />
-      <Folder Include="wwwroot\Avatars\" />
       <Folder Include="wwwroot\Tasks\" />
       <Folder Include="wwwroot\Rang\" />
     </ItemGroup>
