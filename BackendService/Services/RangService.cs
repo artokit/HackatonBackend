@@ -57,7 +57,8 @@ public class RangService
             Email = user.Email,
             Photo = user.Photo,
             RatingScore = user.RatingScore,
-            Rang = rang
+            Rang = rang,
+            Role = user.Role
         };
         return u;
     }

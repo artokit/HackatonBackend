@@ -91,4 +91,13 @@ public class TaskRepository
             new { id });
         return await connection.FirstOrDefault<string>(queryObject);
     }
+
+    public async Task<List<TaskCase>> GetAllByLevelId(int levelId, int categoryId)
+    {
+        var query = (categoryId == 0) ? "SELECT * FROM \"Tasks\" Where \"LevelId\" = @levelId" : "SELECT * FROM \"Tasks\" Where \"LevelId\" = @levelId AND \"CategoryId\" = @categoryId";
+        var queryObject = new QueryObject(
+            query, new {levelId, categoryId});
+        
+        return await connection.ListOrEmpty<TaskCase>(queryObject);
+    }
 }
