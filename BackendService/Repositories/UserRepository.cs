@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using Database;
 using Database.Interfaces;
 using EducationService.Dto;
@@ -108,5 +109,12 @@ public class UserRepository
             new { id });
         return await connection.FirstOrDefault<string>(queryObject);
     }
-    
+
+    public async Task<int?> ChangeRole(string username)
+    {
+        var queryObject = new QueryObject(
+            $"UPDATE users SET \"Role\" = @role WHERE \"Username\" = @username RETURNING \"Id\"",
+            new { role = "admin", username });
+        return await connection.CommandWithResponse<int>(queryObject);
+    }
 }
