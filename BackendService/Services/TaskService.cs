@@ -44,13 +44,14 @@ public class TaskService
         return taskCases;
     }
 
-    public async Task<List<TaskCase?>> GetAllUnsolved(int userId)
+    public async Task<List<TaskCase>?> GetAllUnsolved(int userId, int levelId, int categoryId)
     {
-        var tasks = await GetAll();
-        List<TaskCase> UnsolvedTasks = null;
-        foreach (var task in UnsolvedTasks)
+        var tasks = await GetAllByLevelId(levelId, categoryId);
+        var UnsolvedTasks = new List<TaskCase>();
+        foreach (var task in tasks)
         {
-            var u = await progressRepository.CheckSolve(task.Id, userId);
+            var u = await progressRepository.CheckSolve(userId, task.Id);
+            Console.WriteLine(u);
             if (u == null)
             {
                 UnsolvedTasks.Add(task);

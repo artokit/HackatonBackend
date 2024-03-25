@@ -32,9 +32,9 @@ public class ProgressRepository
     public async Task<int?> CheckSolve(int UserId, int TaskId)
     {
         var queryObject = new QueryObject(
-            $"SELECT \"TaskId\" FROM \"Progress\" WHERE \"UserId\" = @UserId AND \"TaskId\" = @TaskId RETURNING \"TaskId\" ",
+            $"SELECT \"TaskId\" FROM \"Progress\" WHERE \"UserId\" = @UserId AND \"TaskId\" = @TaskId ",
             new { UserId, TaskId });
-        return await connection.CommandWithResponse<int?>(queryObject);
+        return await connection.FirstOrDefault<int?>(queryObject);
     }
 
 }

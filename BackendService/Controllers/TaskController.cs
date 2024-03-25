@@ -44,19 +44,6 @@ public class TaskController: BaseController
 
         return Ok(tasks);
     }
-
-    [HttpGet("unsolved")]
-    // [Authorize]
-    public async Task<IActionResult> GetAllUnSolved(int userId)
-    {
-        var tasks = await taskService.GetAllUnsolved(userId);
-        if (tasks.IsNullOrEmpty())
-        {
-            return NotFound();
-        }
-
-        return Ok(tasks);
-    }
     
     [HttpGet("{id}")]
     public async Task<IActionResult> GetInfo(int id)
@@ -150,10 +137,10 @@ public class TaskController: BaseController
         return Ok(rangResponse);
     }
 
-    [HttpGet("sortTask")]
-    // [Authorize]
+    [Authorize]
+    [HttpGet("sortTask/{userId}")]
     public async Task<IActionResult> GetAllByLevel(int levelId, int categoryId)
     {
-        return Ok(await taskService.GetAllByLevelId(levelId, categoryId));
+        return Ok(await taskService.GetAllUnsolved(UserId, levelId, categoryId));
     }
 }
