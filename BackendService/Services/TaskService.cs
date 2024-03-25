@@ -159,4 +159,9 @@ public class TaskService
         UserRang = userRang
     };
     }
+
+    public async Task<List<TaskCase>> GetAllByLevelId(int levelId, int categoryId)
+    {
+        return await taskRepository.GetAllByLevelId(levelId, categoryId);
+    }
 }

@@ -110,7 +110,8 @@ public class TaskController: BaseController
         var task = await taskService.DeleteTask(id);
         return (task is null) ? NotFound() : Ok(task);
     }
-    //[Authorize]
+    
+    [Authorize]
     [HttpPut("solve/{id}")]
     public async Task<IActionResult> Solve(int id, string answer, int userId)
     {
@@ -121,5 +122,12 @@ public class TaskController: BaseController
         }
 
         return Ok(rangResponse);
+    }
+
+    [HttpGet("sortTask")]
+    // [Authorize]
+    public async Task<IActionResult> GetAllByLevel(int levelId, int categoryId)
+    {
+        return Ok(await taskService.GetAllByLevelId(levelId, categoryId));
     }
 }
