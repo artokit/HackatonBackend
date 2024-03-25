@@ -1,6 +1,7 @@
 ﻿using EducationService.Dto;
 using EducationService.Models;
 using EducationService.Repositories;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EducationService.Services;
 
@@ -11,11 +12,11 @@ public class TaskService
     private readonly UserService userService;
     private readonly RangService rangService;
     private readonly CategoryRepository categoryRepository;
-    private readonly ProgressService progressService;
+    private readonly ProgressRepository progressRepository;
     private readonly IWebHostEnvironment appEnvironment;
     public TaskService(LevelService levelService, UserService userService, 
         RangService rangService, TaskRepository taskRepository, CategoryRepository categoryRepository,
-        ProgressService progressService, IWebHostEnvironment appEnvironment)
+    ProgressRepository progressRepository, IWebHostEnvironment appEnvironment)
     {
         this.levelService = levelService;
         this.userService = userService;
@@ -23,8 +24,26 @@ public class TaskService
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
         this.appEnvironment = appEnvironment;
-        this.progressService = progressService;
+        this.progressRepository = progressRepository;
     }
+    public async Task<List<TaskCase?>> GetAllSolve(int UserId)
+    {
+        var tasks = await progressRepository.GetAllSolved(UserId);
+        if (tasks.IsNullOrEmpty())
+        {
+            return null;
+        }
+
+        List<TaskCase> taskCases = null;
+        foreach (var taskId in tasks)
+        {
+            var task = await GetById(taskId);
+            taskCases.Add(task);
+        }
+        
+        return taskCases;
+    }
+
     public async Task<List<TaskCase?>> GetAll()
     {
         return await taskRepository.GetAll();
@@ -113,7 +132,7 @@ public class TaskService
             return null;
         }
 
-        await progressService.SolveTask(userId, id);
+        await progressRepository.SolveTask(userId, id);
         return await SolveAward(task, userId);
 
     }
