@@ -35,10 +35,14 @@ public class UserController: BaseController
     }
     
     [AllowAnonymous]
-    [HttpGet("image/{id}")]
+    [HttpGet("image")]
     public async Task<IActionResult> GetImage(int id)
     {
         var path = await userService.GetPath(id);
+        if (path is null)
+        {
+            path = "/Avatars/" + "default.jpg";
+        }
         path = appEnviroment.WebRootPath + path;
         var imageFileStream = System.IO.File.OpenRead(path);
         return File(imageFileStream, "image/jpg");
