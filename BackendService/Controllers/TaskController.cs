@@ -39,7 +39,7 @@ public class TaskController: BaseController
     [Authorize]
     public async Task<IActionResult> GetAllSolved()
     {
-        var tasks = await progressService.GetAllSolve(UserId);
+        var tasks = await taskService.GetAllSolve(UserId);
         if (tasks.IsNullOrEmpty())
         {
             return NotFound();

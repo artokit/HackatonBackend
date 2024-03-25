@@ -29,4 +29,6 @@ public class ProgressRepository
         return await connection.CommandWithResponse<int>(queryObject);
     }
     
+    
+
 }
