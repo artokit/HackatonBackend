@@ -14,11 +14,11 @@ public class TaskRepository
         this.connection = connection;
     }
 
-    public async Task<List<TaskJoinDTO?>> GetAll()
+    public async Task<List<TaskCase?>> GetAll()
     {
         var queryObject = new QueryObject(
-            $"SELECT * FROM \"Tasks\" JOIN \"Levels\" ON \"Tasks\".\"LevelId\" = \"Levels\".\"Id\"");
-        return await connection.ListOrEmpty<TaskJoinDTO?>(queryObject);
+            $"SELECT * FROM \"Tasks\"");
+        return await connection.ListOrEmpty<TaskCase?>(queryObject);
     }
 
     public async Task<TaskCase?> GetById(int id)

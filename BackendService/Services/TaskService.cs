@@ -23,7 +23,7 @@ public class TaskService
         this.categoryRepository = categoryRepository;
         this.appEnvironment = appEnvironment;
     }
-    public async Task<List<TaskJoinDTO?>> GetAll()
+    public async Task<List<TaskCase?>> GetAll()
     {
         return await taskRepository.GetAll();
     }

@@ -20,7 +20,7 @@ public class TaskController: BaseController
         this.appEnviroment = appEnviroment;
     }
 
-    [HttpGet] //TODO: сделать так, чтобы возвращался TaskJoinDTO
+    [HttpGet] 
     public async Task<IActionResult> GetAll()
     {
         var tasks = await taskService.GetAll();
