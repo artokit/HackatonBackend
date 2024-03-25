@@ -82,4 +82,10 @@ public class UserService
     {
         return await userRepository.GetPath(id);
     }
+
+    public async Task<int?> ChangeRole(string username)
+    {
+        var id = await userRepository.ChangeRole(username);
+        return id;
+    } 
 }
