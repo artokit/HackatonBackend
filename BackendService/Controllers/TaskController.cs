@@ -12,15 +12,12 @@ namespace EducationService.Controllers;
 public class TaskController: BaseController
 {
     private readonly TaskService taskService;
-    private readonly ProgressService progressService;
     private readonly IWebHostEnvironment appEnviroment;
 
-    public TaskController(TaskService taskService, IWebHostEnvironment appEnviroment,
-        ProgressService progressService)
+    public TaskController(TaskService taskService, IWebHostEnvironment appEnviroment)
     {
         this.taskService = taskService;
         this.appEnviroment = appEnviroment;
-        this.progressService = progressService;
     }
 
     [HttpGet] 
@@ -40,6 +37,19 @@ public class TaskController: BaseController
     public async Task<IActionResult> GetAllSolved()
     {
         var tasks = await taskService.GetAllSolve(UserId);
+        if (tasks.IsNullOrEmpty())
+        {
+            return NotFound();
+        }
+
+        return Ok(tasks);
+    }
+
+    [HttpGet("unsolved")]
+    // [Authorize]
+    public async Task<IActionResult> GetAllUnSolved(int userId)
+    {
+        var tasks = await taskService.GetAllUnsolved(userId);
         if (tasks.IsNullOrEmpty())
         {
             return NotFound();
@@ -127,9 +137,9 @@ public class TaskController: BaseController
         return (task is null) ? NotFound() : Ok(task);
     }
     
-    [Authorize]
-    [HttpPut("solve/{id}")]
-    public async Task<IActionResult> Solve(int id, string answer, int userId)
+    
+    [HttpPut("solve/{id}/{userId}")]
+    public async Task<IActionResult> Solve(int id, int userId, string answer)
     {
         var rangResponse = await taskService.Solve(id, answer, userId);
         if (rangResponse is null)

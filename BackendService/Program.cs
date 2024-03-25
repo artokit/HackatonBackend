@@ -29,6 +29,8 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<LevelRepository>();
 builder.Services.AddScoped<LevelService>();
 builder.Services.AddScoped<CategoryRepository>();
+builder.Services.AddScoped<ProgressRepository>();
+builder.Services.AddScoped<ProgressService>();
 builder.Services.AddScoped<AuthorizationService>();
 builder.Services.AddScoped<RatingService>();
 builder.Services.AddScoped<TaskRepository>();

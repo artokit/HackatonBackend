@@ -1,4 +1,5 @@
-﻿using EducationService.Models;
+﻿using Database;
+using EducationService.Models;
 using EducationService.Repositories;
 using Microsoft.IdentityModel.Tokens;
 
