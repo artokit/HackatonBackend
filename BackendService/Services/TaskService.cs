@@ -11,10 +11,11 @@ public class TaskService
     private readonly UserService userService;
     private readonly RangService rangService;
     private readonly CategoryRepository categoryRepository;
+    private readonly ProgressService progressService;
     private readonly IWebHostEnvironment appEnvironment;
     public TaskService(LevelService levelService, UserService userService, 
         RangService rangService, TaskRepository taskRepository, CategoryRepository categoryRepository,
-        IWebHostEnvironment appEnvironment)
+        ProgressService progressService, IWebHostEnvironment appEnvironment)
     {
         this.levelService = levelService;
         this.userService = userService;
@@ -22,8 +23,9 @@ public class TaskService
         this.taskRepository = taskRepository;
         this.categoryRepository = categoryRepository;
         this.appEnvironment = appEnvironment;
+        this.progressService = progressService;
     }
-    public async Task<List<TaskJoinDTO?>> GetAll()
+    public async Task<List<TaskCase?>> GetAll()
     {
         return await taskRepository.GetAll();
     }
@@ -110,6 +112,8 @@ public class TaskService
         {
             return null;
         }
+
+        await progressService.SolveTask(userId, id);
         return await SolveAward(task, userId);
 
     }
