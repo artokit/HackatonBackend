@@ -12,12 +12,15 @@ namespace EducationService.Controllers;
 public class TaskController: BaseController
 {
     private readonly TaskService taskService;
+    private readonly ProgressService progressService;
     private readonly IWebHostEnvironment appEnviroment;
 
-    public TaskController(TaskService taskService, IWebHostEnvironment appEnviroment)
+    public TaskController(TaskService taskService, IWebHostEnvironment appEnviroment,
+        ProgressService progressService)
     {
         this.taskService = taskService;
         this.appEnviroment = appEnviroment;
+        this.progressService = progressService;
     }
 
     [HttpGet] 
@@ -27,6 +30,19 @@ public class TaskController: BaseController
         if (tasks.IsNullOrEmpty())
         {
             return BadRequest();
+        }
+
+        return Ok(tasks);
+    }
+
+    [HttpGet("solved")]
+    [Authorize]
+    public async Task<IActionResult> GetAllSolved()
+    {
+        var tasks = await progressService.GetAllSolve(UserId);
+        if (tasks.IsNullOrEmpty())
+        {
+            return NotFound();
         }
 
         return Ok(tasks);
